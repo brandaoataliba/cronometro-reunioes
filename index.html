@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4A6DA7">
+  <title>Cronômetro de Reuniões</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cronômetro">
+  <style>
+    *{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;background:#f4f4f2;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    body{overflow:hidden}
+    #splash{position:fixed;inset:0;display:grid;place-items:center;background:#4A6DA7;color:#fff;z-index:10;transition:opacity .25s ease}
+    #splash.hide{opacity:0;pointer-events:none}
+    .brand{text-align:center;padding:28px}.brand img{width:112px;height:112px;border-radius:26px;box-shadow:0 12px 30px #0003}.brand h1{font-size:23px;margin:15px 0 4px}.brand p{margin:0;opacity:.85;font-size:14px}
+    iframe{display:block;border:0;width:100%;height:100%;background:#fff}
+    #fallback{position:fixed;left:12px;right:12px;bottom:12px;z-index:5;text-align:center;display:none}
+    #fallback a{display:inline-block;background:#4A6DA7;color:#fff;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:700}
+  </style>
+</head>
+<body>
+  <div id="splash"><div class="brand"><img src="icons/icon-192.png" alt=""><h1>Cronômetro de Reuniões</h1><p>Carregando aplicativo…</p></div></div>
+  <iframe id="app" title="Cronômetro de Reuniões" allow="clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <div id="fallback"><a id="openWeb" target="_blank" rel="noopener">Abrir versão web</a></div>
+  <script>
+    const APP_URL = 'https://script.google.com/macros/s/AKfycbxCaLLYbn5qDr7pB-4wt8hYqslfrhfot5aMfZkGs1NJxWWs39V16_aNGV-Bt2EqvLU-/exec';
+    const frame = document.getElementById('app');
+    const splash = document.getElementById('splash');
+    const fallback = document.getElementById('fallback');
+    const openWeb = document.getElementById('openWeb');
+    openWeb.href = APP_URL;
+    let loaded = false;
+    frame.addEventListener('load', () => {
+      loaded = true;
+      setTimeout(() => splash.classList.add('hide'), 250);
+    });
+    frame.src = APP_URL;
+    setTimeout(() => {
+      if (!loaded) fallback.style.display = 'block';
+    }, 9000);
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+    }
+  </script>
+</body>
+</html>
